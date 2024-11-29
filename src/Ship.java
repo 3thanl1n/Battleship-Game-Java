@@ -81,7 +81,19 @@ public abstract class Ship {
     }
 
     public String toString() {
-        // Implementation for string representation
+        int trueCounter= 0;
+        for (boolean hits : hit){
+            if (hits == true){
+                trueCounter += 1;
+            }
+        }
+        if (isSunk() == true){
+            return "x";
+        } else if (trueCounter < length && trueCounter > 0){
+            return "S";
+        }
+
+        return ".";
     }
 
 
