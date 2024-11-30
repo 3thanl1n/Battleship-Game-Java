@@ -72,13 +72,78 @@ public abstract class Ship {
     }
 
     public boolean okToPlaceShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-        // Implementation for checking valid placement
+        Ship[][] ships = ocean.getShipArray();
 
+        // Check for negative coordinates
+        if (row < 0 || column < 0) {
+            return false;
+        }
+
+        // Check boundaries based on orientation
+        if (horizontal && column + length > 10) {
+            return false;
+        }
+        if (!horizontal && row + length > 10) {
+            return false;
+        }
+
+        if (horizontal == true) {
+            int colT = column;
+            int rowT = row;
+
+            for (int rowI = Math.max(0, row - 1); rowI <= Math.min(9, row + 1); rowI += 1) {
+                if (rowI == row - 1 || rowI == row + 1) {
+                    for (int colI = Math.max(0, column - 1); colI <= Math.min(9, column + length); colI++) {
+                        if (ocean.isOccupied(rowI, colI)) {
+                            return false;
+                        }
+                    }
+                } else {  // ship's row
+                    if (column > 0 && ocean.isOccupied(rowI, column - 1)) return false;
+                    if (column + length < 10 && ocean.isOccupied(rowI, column + length)) return false;
+                }
+            }
+        } else {
+            int colT = column;
+            int rowT = row;
+
+            for (int colI = Math.max(0, column - 1); colI <= Math.min(9, column + 1); colI += 1) {
+                if (colI == column - 1 || colI == column + 1) {
+                    for (int rowI = Math.max(0, row - 1); rowI <= Math.min(9, row + length); rowI++) {
+                        if (ocean.isOccupied(rowI, colI)) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (row > 0 && ocean.isOccupied(row - 1, colI)) return false;
+                    if (row + length < 10 && ocean.isOccupied(row + length, colI)) return false;
+                }
+            }
+
+        }
+        return true;
     }
+
 
     public void placeShipAt(int row, int column, boolean horizontal, Ocean ocean) {
-        // Implementation for placing ship
-    }
+       Ship[][] ships = ocean.getShipArray();
+       this.horizontal= horizontal;
+       this.bowRow= row;
+       this.bowColumn= column;
+       hit= new boolean[length];
+
+       if(horizontal){
+           for (int colI= column; colI < column + length; colI += 1){
+                   ships[row][colI]= this;
+               }
+           }else{
+           for (int rowI= row; rowI < row + length; rowI += 1){
+               ships[rowI][column]= this;
+           }
+       }
+
+       }
+
 
     public String toString() {
         int trueCounter= 0;
