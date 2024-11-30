@@ -6,7 +6,7 @@ public class EmptySea extends Ship {
 
     @Override
     public boolean shootAt(int row, int column) {
-        hit[0] = true;  // Mark as hit even though it's a miss
+        hit[0] = true;
         return false;
     }
     @Override
